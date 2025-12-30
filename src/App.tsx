@@ -1,3 +1,4 @@
+import { BsStars } from "react-icons/bs";
 import { BsClipboard } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
@@ -6,14 +7,16 @@ import RightSideBuderIcon from "./Components/RightSideBuderIcon";
 
 const App = () => {
   const languages = [
-    { code: "en", label: "English" },
     { code: "ur", label: "Urdu" },
+    { code: "en", label: "English" },
+    { code: "ar", label: "Arabic" },
+    { code: "hi", label: "Hindi" },
     { code: "es", label: "Spanish" },
     { code: "fr", label: "French" },
     { code: "de", label: "German" },
   ];
 
-  const [lang, setLang] = useState<string>("en");
+  const [lang, setLang] = useState<string>("ur");
   const [SelectText, setSelectText] = useState<string>("");
 
   useEffect(() => {
@@ -42,8 +45,8 @@ const App = () => {
         </span>
       </nav>
       <div className="theTextToBetranslate bg-[#F4F7FF] text-gray-700 w-full flex flex-col items-center sm:px-10 px-5 py-5">
-        <div className="LanguagesAndCrossIcon cursor-pointer flex justify-around items-center w-full ">
-          <select
+        <div className="LanguagesAndCrossIcon  flex justify-around items-center w-full ">
+          {/* <select
             className="outline-none cursor-pointer"
             value={lang}
             onChange={(e) => setLang(e.target.value)}
@@ -53,9 +56,16 @@ const App = () => {
                 {l.label}
               </option>
             ))}
-          </select>
+          </select> */}
+          <div className="flex items-center gap-2">
+            <BsStars />
+            <h1>
+              Auto Detect{" "}
+              <span className="text-sm text-[#3750FF] ">Language</span>
+            </h1>
+          </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-5 cursor-pointer">
             <RxCross2
               title="Clear Text"
               onClick={() => setSelectText("")}
@@ -71,11 +81,34 @@ const App = () => {
           </div>
         </div>
         <textarea
+          autoFocus
           value={SelectText}
           onChange={(e) => setSelectText(e.target.value)}
           id=""
           className="w-full bg-gray-300 p-3 h-56 my-3 resize-none rounded-3xl outline-gray-700"
         ></textarea>
+      </div>
+
+      <div className="LanguagesAndCrossIcon my-5 text-black flex justify-around items-center w-full ">
+        <select
+          className="outline-none cursor-pointer"
+          value={lang}
+          onChange={(e) => setLang(e.target.value)}
+        >
+          {languages.map((l) => (
+            <option key={l.code} value={l.code}>
+              {l.label}
+            </option>
+          ))}
+        </select>
+
+          <button>Translate</button>
+          <BsClipboard
+            onClick={() => hanlePasteCopiedText()}
+            title="Paste The Copied Text"
+            size={24}
+            color="#3750FF"
+          />
       </div>
     </div>
   );
