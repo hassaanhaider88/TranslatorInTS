@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { RiTranslateAi } from "react-icons/ri";
 import RightSideBuderIcon from "./Components/RightSideBuderIcon";
-import { toast } from "alert";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setLanguage,
@@ -31,24 +30,24 @@ const App = () => {
   const hanlePasteCopiedText = () => {
     if (navigator.clipboard) {
       navigator.clipboard.readText().then((text) => {
-        if (!text) return toast("Nothing For Paste");
+        if (!text) return alert("Nothing For Paste");
         dispatch(setText(text));
       });
     }
   };
   const hanleCopiedText = () => {
-    if (!Obj.translatedText) return toast("Nothing To Copy");
+    if (!Obj.translatedText) return alert("Nothing To Copy");
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(Obj.translatedText);
-      toast("Copied");
+      alert("Copied");
     }
   };
 
   const hanleTranslateClick = async () => {
-    if (Obj.loading) return toast("Please wait..");
+    if (Obj.loading) return alert("Please wait..");
     if (Obj.text == "") {
-      return toast("Please Enter Text To Translate");
+      return alert("Please Enter Text To Translate");
     } else {
       dispatch(setLoading(true));
       const Res = await fetch(
@@ -59,7 +58,7 @@ const App = () => {
         dispatch(setTranslatedText(data.data));
         dispatch(setLoading(false));
       } else {
-        toast("Error in Translating Text");
+        alert("Error in Translating Text");
         dispatch(setLoading(false));
         console.log(data);
       }
