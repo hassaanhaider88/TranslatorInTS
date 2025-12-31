@@ -5,8 +5,17 @@ import { RxCross2 } from "react-icons/rx";
 import { RiTranslateAi } from "react-icons/ri";
 import RightSideBuderIcon from "./Components/RightSideBuderIcon";
 import { toast } from "alert";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setLanguage,
+  setText,
+  setTranslatedText,
+  setLoading,
+} from "./redux/Feature/TransalteSlice";
 
 const App = () => {
+  const Obj = useSelector((state) => state.Translate);
+  const dispatch = useDispatch();
   const languages = [
     { code: "ur", label: "Urdu" },
     { code: "en", label: "English" },
@@ -17,51 +26,49 @@ const App = () => {
     { code: "de", label: "German" },
   ];
 
-  const [lang, setLang] = useState<string>("ur");
-  const [SelectText, setSelectText] = useState<string>("");
-  const [TranslatedText, setTranslatedText] = useState("");
-  const [Loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    console.log(lang);
-  }, [lang]);
+  const [lang] = useState<string>("ur");
 
   const hanlePasteCopiedText = () => {
     if (navigator.clipboard) {
       navigator.clipboard.readText().then((text) => {
         if (!text) return toast("Nothing For Paste");
-        setSelectText(text);
+        dispatch(setText(text));
       });
     }
   };
   const hanleCopiedText = () => {
-    if (!TranslatedText) return toast("Nothing To Copy");
+    if (!Obj.translatedText) return toast("Nothing To Copy");
 
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(TranslatedText);
+      navigator.clipboard.writeText(Obj.translatedText);
       toast("Copied");
     }
   };
 
   const hanleTranslateClick = async () => {
-    if (Loading) return toast("Please wait..");
-    if (SelectText == "") {
+    if (Obj.loading) return toast("Please wait..");
+    if (Obj.text == "") {
       return toast("Please Enter Text To Translate");
     } else {
-      setLoading(true);
+      dispatch(setLoading(true));
       const Res = await fetch(
-        `https://hmk-codeweb-downloads.onrender.com/tranlate?textToTranslate=${SelectText}&Lang=${lang}`
+        `https://hmk-codeweb-downloads.onrender.com/tranlate?textToTranslate=${Obj.text}&Lang=${Obj.lang}`
       );
       const data = await Res.json();
       if (data.success) {
         console.log(data);
-        setTranslatedText(data.data);
-        setLoading(false);
+        dispatch(setTranslatedText(data.data));
+        dispatch(setLoading(false));
       } else {
         toast("Error in Translating Text");
-        setLoading(false);
+        dispatch(setLoading(false));
+        console.log(data);
       }
     }
+  };
+
+  const handleLangChange = (lang: string) => {
+    dispatch(setLanguage(lang));
   };
 
   return (
@@ -100,7 +107,7 @@ const App = () => {
           <div className="flex gap-5 cursor-pointer">
             <RxCross2
               title="Clear Text"
-              onClick={() => setSelectText("")}
+              onClick={() => dispatch(setText(""))}
               size={24}
               color="#3750FF"
             />
@@ -114,8 +121,8 @@ const App = () => {
         </div>
         <textarea
           autoFocus
-          value={SelectText}
-          onChange={(e) => setSelectText(e.target.value)}
+          value={Obj.text}
+          onChange={(e) => dispatch(setText(e.target.value))}
           id=""
           className="w-full bg-gray-300 p-3 h-46 my-3 resize-none rounded-3xl outline-gray-700"
         ></textarea>
@@ -127,7 +134,7 @@ const App = () => {
           <select
             className="outline-none cursor-pointer"
             value={lang}
-            onChange={(e) => setLang(e.target.value)}
+            onChange={(e) => handleLangChange(e.target.value)}
           >
             {languages.map((l) => (
               <option key={l.code} value={l.code}>
@@ -140,7 +147,7 @@ const App = () => {
         <button
           onClick={hanleTranslateClick}
           className={`${
-            Loading ? "cursor-not-allowed" : "cursor-pointer"
+            Obj.loading ? "cursor-not-allowed" : "cursor-pointer"
           } relative active:scale-95 duration-300 transition-all text-[13px] rounded-2xl border-0 p-1 bg-[radial-gradient(circle_80px_at_80%_-10%,#ffffff,#181b1b)]`}
           style={{
             position: "relative",
@@ -187,7 +194,7 @@ const App = () => {
                 zIndex: 0,
               }}
             />
-            {Loading ? "Translating..." : "Translate"}
+            {Obj.loading ? "Translating..." : "Translate"}
           </div>
         </button>
 
@@ -202,7 +209,7 @@ const App = () => {
       <div className="px-5 w-full md:px-10">
         <textarea
           readOnly
-          value={TranslatedText}
+          value={Obj.translatedText}
           className="w-full science-gothicURDU text-black font-semibold bg-gray-300 p-3 outline-none h-30 my-3 resize-none rounded-3xl"
         ></textarea>
       </div>
