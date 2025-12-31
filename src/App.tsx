@@ -56,7 +56,6 @@ const App = () => {
       );
       const data = await Res.json();
       if (data.success) {
-        console.log(data);
         dispatch(setTranslatedText(data.data));
         dispatch(setLoading(false));
       } else {
