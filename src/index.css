@@ -1,6 +1,12 @@
-@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=BBH+Bartle&family=Bebas+Neue&family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Noto+Nastaliq+Urdu:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Science+Gothic:wght@100..900&display=swap");
 
-*::selection{
-    color: #3750FF;
-    background: white;
+@import "tailwindcss";
+*::selection {
+  color: #3750ff;
+  background: white;
+  font-family: "Science Gothic", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "slnt" 0, "wdth" 100, "CTRS" 0;
 }
