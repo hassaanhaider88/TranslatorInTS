@@ -1,10 +1,11 @@
 import { BsStars } from "react-icons/bs";
 import { BsClipboard } from "react-icons/bs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { RiTranslateAi } from "react-icons/ri";
 import RightSideBuderIcon from "./Components/RightSideBuderIcon";
 import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "./redux/store";
 import {
   setLanguage,
   setText,
@@ -13,7 +14,7 @@ import {
 } from "./redux/Feature/TransalteSlice";
 
 const App = () => {
-  const Obj = useSelector((state) => state.Translate);
+  const Obj = useSelector((state: RootState) => state.Translate);
   const dispatch = useDispatch();
   const languages = [
     { code: "ur", label: "Urdu" },
